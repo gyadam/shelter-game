@@ -1,5 +1,7 @@
-import Particle from './covidparticle.js';
 'use strict';
+
+import Particle from './covidparticle.js';
+import House from './house.js';
 
 let canvas = document.getElementById("gameScreen");
 let ctx = canvas.getContext("2d");
@@ -20,6 +22,8 @@ for (let n = 0; n < numParticles; n++){
     particle.draw(ctx);
 }
 
+let house = new House();
+
 let lastTime = 0;
 
 function gameLoop(timestamp){
@@ -28,6 +32,8 @@ function gameLoop(timestamp){
     lastTime = timestamp;
 
     ctx.clearRect(0, 0, GAMEWIDTH, GAMEHEIGHT);
+
+    house.draw(ctx);
 
     for (let particle of particles){
         particle.update(deltaTime);
