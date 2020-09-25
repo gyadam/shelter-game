@@ -1,17 +1,19 @@
 'use strict';
+
 const SPEED = 0.5;
 const GAMEWIDTH = 1000;
 const GAMEHEIGHT = 600;
 
 export default class Particle {
-    constructor(x, y, color = "#FF0000"){
+    constructor(game, x, y, color = "#FF0000"){
+        this.game = game;
         this.position = {
             x: x,
             y: y
         }
         this.speed = {
-            vx: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1),
-            vy: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1)
+            x: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1),
+            y: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1)
         }
         this.color  = color;
         this.size = 1;
@@ -54,8 +56,42 @@ export default class Particle {
     }
 
     update(deltaTime){
-        this.position.x += this.speed.vx * deltaTime;
-        this.position.y += this.speed.vy * deltaTime;
+
+        const dx = this.speed.x * deltaTime;
+        const dy = this.speed.y * deltaTime;
+
+        let topOfHouse = this.game.house.position.y;
+        let bottomOfHouse = this.game.house.position.y + this.game.house.height;
+        let leftSideOfHouse = this.game.house.position.x;
+        let rightSideOfHouse = this.game.house.position.x + this.game.house.width;
+
+        let topOfParticle = this.position.y - this.radius - this.spikeOuterSize;
+        let bottomOfParticle = this.position.y + this.radius + this.spikeOuterSize;
+        let leftSideOfParticle = this.position.x - this.radius - this.spikeOuterSize;
+        let rightSideParticle = this.position.x + this.radius + this.spikeOuterSize;
+
+        // collision w top of house
+        if (bottomOfParticle < topOfHouse && bottomOfParticle + dy > topOfHouse && rightSideParticle + dx >= leftSideOfHouse && leftSideOfParticle + dx <= rightSideOfHouse){
+            this.speed.y = - this.speed.y;
+        }
+
+        // collision w bottom of house
+        if (topOfParticle > bottomOfHouse && topOfParticle + dy < bottomOfHouse && rightSideParticle + dx >= leftSideOfHouse && leftSideOfParticle + dx <= rightSideOfHouse){
+            this.speed.y = - this.speed.y;
+        }
+
+        // collision w left side of house
+        if (rightSideParticle < leftSideOfHouse && rightSideParticle + dx > leftSideOfHouse && bottomOfParticle + dy >= topOfHouse && topOfParticle + dy <= bottomOfHouse){
+            this.speed.x = - this.speed.x;
+        }
+
+        // collision w right side of house
+        if (leftSideOfParticle > rightSideOfHouse && leftSideOfParticle + dx < rightSideOfHouse && bottomOfParticle + dy >= topOfHouse && topOfParticle + dy <= bottomOfHouse){
+            this.speed.x = - this.speed.x;
+        }
+
+        this.position.x += dx;
+        this.position.y += dy;
 
         if (this.position.x > GAMEWIDTH + this.radius){
             this.position.x = 0 - this.radius;

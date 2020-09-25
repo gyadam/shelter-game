@@ -17,7 +17,7 @@ export default class Game{
             const x = Math.floor(Math.random() * this.gameWidth);
             const y = Math.floor(Math.random() * this.gameHeight);
 
-            let particle = new Particle(x, y);
+            let particle = new Particle(this, x, y);
             particles.push(particle);
         }
         return particles;
