@@ -1,5 +1,7 @@
 import Particle from './covidparticle.js';
 import House from './house.js';
+import InputHandler from './input.js';
+import Player from './player.js';
 
 export default class Game{
     constructor(gameWidth, gameHeight, numParticles){
@@ -7,6 +9,8 @@ export default class Game{
         this.gameHeight = gameHeight;
         this.particles = this.createRandomParticles(numParticles);
         this.house = new House();
+        this.player = new Player(this, 487, 285);
+        new InputHandler(this.player);
     }
 
     createRandomParticles(numParticles){
@@ -27,6 +31,7 @@ export default class Game{
         for (let particle of this.particles){
             particle.update(deltaTime);
         }
+        this.player.update(deltaTime);
     }
 
     draw(ctx){
@@ -34,6 +39,7 @@ export default class Game{
             particle.draw(ctx);
         }
         this.house.draw(ctx);
+        this.player.draw(ctx);
     }
 
 }
