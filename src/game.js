@@ -3,14 +3,20 @@ import House from './house.js';
 import InputHandler from './input.js';
 import Player from './player.js';
 
+const GAMESTATE = {
+    PAUSED: 0,
+    RUNNING: 1,
+}
+
 export default class Game{
     constructor(gameWidth, gameHeight, numParticles){
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
+        this.gameState = GAMESTATE.RUNNING;
         this.particles = this.createRandomParticles(numParticles);
         this.house = new House();
         this.player = new Player(this, 487, 285);
-        new InputHandler(this.player);
+        new InputHandler(this);
     }
 
     createRandomParticles(numParticles){
@@ -27,11 +33,21 @@ export default class Game{
         return particles;
     }
 
-    update(deltaTime){
-        for (let particle of this.particles){
-            particle.update(deltaTime);
+    togglePause(){
+        if (this.gameState == GAMESTATE.RUNNING){
+            this.gameState = GAMESTATE.PAUSED;
+        } else{
+            this.gameState = GAMESTATE.RUNNING;
         }
-        this.player.update(deltaTime);
+    }
+
+    update(deltaTime){
+        if (this.gameState == GAMESTATE.RUNNING){
+            for (let particle of this.particles){
+                particle.update(deltaTime);
+            }
+            this.player.update(deltaTime);
+        }
     }
 
     draw(ctx){
@@ -40,6 +56,15 @@ export default class Game{
         }
         this.house.draw(ctx);
         this.player.draw(ctx);
+        
+        if (this.gameState == GAMESTATE.PAUSED){
+            ctx.fillStyle = 'rgba(0,0,0,0.4)';
+            ctx.fillRect(0,0,this.gameWidth, this.gameHeight);
+            ctx.font = "bold 40px Arial";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText("Paused", this.gameWidth / 2, this.gameHeight / 3);
+        }
     }
 
 }

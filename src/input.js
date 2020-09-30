@@ -1,37 +1,39 @@
 export default class InputHandler{
-    constructor(player){
+    constructor(game){
         document.addEventListener('keydown', (event) => {
             switch(event.key){
                 case "ArrowLeft":
-                    player.moveLeft();
+                    game.player.moveLeft();
                     break;
                 case "ArrowRight":
-                    player.moveRight();
+                    game.player.moveRight();
                     break;
                 case "ArrowUp":
-                    player.moveUp();
+                    game.player.moveUp();
                     break;
                 case "ArrowDown":
-                    player.moveDown();
+                    game.player.moveDown();
                     break;
+                case "Escape":
+                    game.togglePause();
             }
         });
 
         document.addEventListener('keyup', (event) => {
             switch(event.key){
                 case "ArrowLeft":
-                    player.stopLeft();
+                    game.player.stopLeft();
                     break;
                 case "ArrowRight":
-                    player.stopRight();
+                    game.player.stopRight();
                     break;
                 case "ArrowUp":
-                    player.stopUp();
+                    game.player.stopUp();
                     break;
                 case "ArrowDown":
-                    player.stopDown();
+                    game.player.stopDown();
                     break;
             }
-        })
+        });
     }
 }
