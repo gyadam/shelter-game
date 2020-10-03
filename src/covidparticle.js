@@ -23,6 +23,7 @@ export default class Particle {
         this.spikeOuterSize = this.radius / 3;
         this.bump = this.radius / 5;
         this.numDots = 5;
+        this.markedForDeletion = false;
     }
 
     draw(ctx){
@@ -64,6 +65,11 @@ export default class Particle {
         let bottomOfHouse = this.game.house.position.y + this.game.house.height;
         let leftSideOfHouse = this.game.house.position.x;
         let rightSideOfHouse = this.game.house.position.x + this.game.house.width;
+        
+        let topOfPlayer = this.game.player.position.y;
+        let bottomOfPlayer = this.game.player.position.y + this.game.player.height;
+        let leftSideOfPlayer = this.game.player.position.x;
+        let rightSideOfPlayer = this.game.player.position.x + this.game.player.width;
 
         let topOfParticle = this.position.y - this.radius - this.spikeOuterSize;
         let bottomOfParticle = this.position.y + this.radius + this.spikeOuterSize;
@@ -88,6 +94,30 @@ export default class Particle {
         // collision w right side of house
         if (leftSideOfParticle > rightSideOfHouse && leftSideOfParticle + dx < rightSideOfHouse && bottomOfParticle + dy >= topOfHouse && topOfParticle + dy <= bottomOfHouse){
             this.speed.x = - this.speed.x;
+        }
+
+        // collision w top of player
+        if (bottomOfParticle < topOfPlayer && bottomOfParticle + dy > topOfPlayer && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
+            this.markedForDeletion = true;
+            this.game.player.health--;
+        }
+
+        // collision w bottom of player
+        if (topOfParticle > bottomOfPlayer && topOfParticle + dy < bottomOfPlayer && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
+            this.markedForDeletion = true;
+            this.game.player.health--;
+        }
+
+        // collision w left side of player
+        if (rightSideParticle < leftSideOfPlayer && rightSideParticle + dx > leftSideOfPlayer && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
+            this.markedForDeletion = true;
+            this.game.player.health--;
+        }
+
+        // collision w right side of player
+        if (leftSideOfParticle > rightSideOfPlayer && leftSideOfParticle + dx < rightSideOfPlayer && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
+            this.markedForDeletion = true;
+            this.game.player.health--;
         }
 
         this.position.x += dx;

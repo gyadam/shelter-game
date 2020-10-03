@@ -13,16 +13,17 @@ export default class Game{
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.gameState = GAMESTATE.RUNNING;
-        this.particles = this.createRandomParticles(numParticles);
+        this.numParticles = numParticles;
+        this.particles = this.createRandomParticles();
         this.house = new House();
         this.player = new Player(this, 487, 285);
         new InputHandler(this);
     }
 
-    createRandomParticles(numParticles){
+    createRandomParticles(){
         let particles = [];
 
-        for (let n = 0; n < numParticles; n++){
+        for (let n = 0; n < this.numParticles; n++){
 
             const x = Math.floor(Math.random() * this.gameWidth);
             const y = Math.floor(Math.random() * this.gameHeight);
@@ -42,6 +43,20 @@ export default class Game{
     }
 
     update(deltaTime){
+
+        // destroy particles on collision
+        this.particles = this.particles.filter(particle => !particle.markedForDeletion);
+
+        // add new particles in place of destroyed ones
+        let numParticlesToAdd = this.numParticles - this.particles.length;
+        for (let i = 0; i < numParticlesToAdd; i++){
+            const x = Math.floor(Math.random() * this.gameWidth);
+            const y = Math.floor(Math.random() * this.gameHeight);
+
+            let particle = new Particle(this, x, y);
+            this.particles.push(particle);
+        }
+
         if (this.gameState == GAMESTATE.RUNNING){
             for (let particle of this.particles){
                 particle.update(deltaTime);

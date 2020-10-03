@@ -18,7 +18,8 @@ export default class Player{
         this.pupilPosition = {
             x: 4,
             y: 1
-        }
+        };
+        this.health = 100;
     }
 
     moveLeft(){

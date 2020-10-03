@@ -7,7 +7,7 @@ let ctx = canvas.getContext("2d");
 
 const GAMEWIDTH = 1000;
 const GAMEHEIGHT = 600;
-const NUM_PARTICLES = 50;
+const NUM_PARTICLES = 5;
 
 let game = new Game(GAMEWIDTH, GAMEHEIGHT, NUM_PARTICLES);
 
