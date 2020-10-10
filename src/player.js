@@ -1,5 +1,5 @@
 export default class Player{
-    constructor(game, x, y){
+    constructor(game, x, y, color){
         this.game = game;
         this.position = {
             x: x,
@@ -7,6 +7,7 @@ export default class Player{
         }
         this.width = 25;
         this.height = 30;
+        this.color = 'black';
         this.maxSpeed = 0.2;
         this.speed = {
             x: 0,
@@ -19,7 +20,9 @@ export default class Player{
             x: 4,
             y: 1
         };
-        this.health = 100;
+        this.health = 10;
+        this.isHit = false;
+        this.impactTime = 0;
     }
 
     moveLeft(){
@@ -54,6 +57,10 @@ export default class Player{
         this.speed.y = 0;
     }
 
+    hit(){
+        this.impactTime = 5;
+    }
+
     update(deltaTime){
         this.position.x += this.speed.x * deltaTime;
         this.position.y += this.speed.y * deltaTime;
@@ -77,12 +84,19 @@ export default class Player{
             this.position.y = this.game.gameHeight - this.height;
             this.speed.y = 0;
         }
+
+        if (this.impactTime === 0){
+            this.isHit = false;
+        } else {
+            this.isHit = true;
+            this.impactTime--;
+        }
     }
 
     draw(ctx){
 
         // body
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = this.isHit ? 'red' : 'black';
         ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
 
         // legs
@@ -114,7 +128,7 @@ export default class Player{
             this.pupilPosition.y = 4;
         }
 
-        ctx.fillStyle = 'black';
+        ctx.fillStyle = this.isHit ? 'red' : 'black';
         ctx.fillRect(this.position.x + this.eyeOffset + this.pupilPosition.x, this.position.y + this.eyeOffset + this.pupilPosition.y, this.pupilSize, this.pupilSize);
         ctx.fillRect(this.position.x + this.width - this.eyeSize - this.eyeOffset + this.pupilPosition.x, this.position.y + this.eyeOffset + this.pupilPosition.y, this.pupilSize, this.pupilSize);
         
