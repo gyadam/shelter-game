@@ -20,9 +20,10 @@ export default class Player{
             x: 4,
             y: 1
         };
-        this.health = 10;
+        this.health = 100;
         this.isHit = false;
         this.impactTime = 0;
+        this.heal = true;
     }
 
     moveLeft(){
