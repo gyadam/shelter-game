@@ -2,6 +2,7 @@ import Particle from './covidparticle.js';
 import House from './house.js';
 import InputHandler from './input.js';
 import Player from './player.js';
+import Bar from './bar.js';
 
 const GAMESTATE = {
     PAUSED: 0,
@@ -20,6 +21,7 @@ export default class Game{
         this.player = new Player(this, 487, 285);
         new InputHandler(this);
         this.frameCounter = 0;
+        this.healthBar = new Bar(0.05 * this.gameWidth, 0.05 * this.gameHeight, 150, 20, "HEALTH", 100);
     }
 
     createRandomParticles(){
@@ -83,6 +85,8 @@ export default class Game{
                     this.player.health = this.player.health >= 100 ? 100 : this.player.health + 1;
                 }
         }
+
+        this.healthBar.update(this.player.health);
     }
 
     draw(ctx){
@@ -112,45 +116,7 @@ export default class Game{
             ctx.fillText("GAME OVER!", this.gameWidth / 2, this.gameHeight / 3);
         }
 
-
-        // health bar (TODO: refactor into separate class, make another bar for sanity)
-
-        const healthBar = {
-            x: 0.05 * this.gameWidth,
-            y: 0.05 * this.gameHeight,
-            width: 150,
-            height: 20
-        }
-
-        ctx.lineWidth= "2";
-        ctx.rect(healthBar.x, healthBar.y, healthBar.width, healthBar.height);
-        ctx.stroke();
-
-        ctx.fillStyle = "white";
-        ctx.fillRect(healthBar.x + 1, healthBar.y + 1, healthBar.width - 2, healthBar.height - 2);
-
-        if (this.player.health > 75){
-            ctx.fillStyle = "green";
-        } else if (this.player.health > 50){
-            ctx.fillStyle = "yellow";
-        } else if (this.player.health > 25){
-            ctx.fillStyle = "orange";
-        } else{
-            ctx.fillStyle = "red";
-        }
-
-        let healthBarFillWidth = this.player.health ? this.player.health * 1.5 - 2 : 0;
-        ctx.fillRect(healthBar.x + 1, healthBar.y + 1, healthBarFillWidth, healthBar.height - 2);
-
-        ctx.font = "bold 16px Arial";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "center";
-        ctx.fillText(this.player.health, healthBar.x + 1 + 79, healthBar.y + 1 + 14);
-
-        ctx.font = "bold 12px Arial";
-        ctx.fillStyle = "black";
-        ctx.textAlign = "left";
-        ctx.fillText('HEALTH', healthBar.x, healthBar.y - 4);
+        this.healthBar.draw(ctx);
     }
 
 }
