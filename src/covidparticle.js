@@ -96,28 +96,37 @@ export default class Particle {
             this.speed.x = - this.speed.x;
         }
 
-        // collision w top of player
-        if (bottomOfParticle < topOfPlayer && bottomOfParticle + dy > topOfPlayer && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
-            this.markedForDeletion = true;
-            this.game.player.health--;
-        }
+        // don't handle collisions on game over. to refactor! (remove player altogether)
+        if (this.game.player.health > 0){
 
-        // collision w bottom of player
-        if (topOfParticle > bottomOfPlayer && topOfParticle + dy < bottomOfPlayer && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
-            this.markedForDeletion = true;
-            this.game.player.health--;
-        }
+            // collision w top of player
+            if (bottomOfParticle < topOfPlayer && bottomOfParticle + dy > topOfPlayer + this.game.player.speed.y * deltaTime && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
+                this.markedForDeletion = true;
+                this.game.player.health--;
+                this.game.player.hit();
 
-        // collision w left side of player
-        if (rightSideParticle < leftSideOfPlayer && rightSideParticle + dx > leftSideOfPlayer && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
-            this.markedForDeletion = true;
-            this.game.player.health--;
-        }
-
-        // collision w right side of player
-        if (leftSideOfParticle > rightSideOfPlayer && leftSideOfParticle + dx < rightSideOfPlayer && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
-            this.markedForDeletion = true;
-            this.game.player.health--;
+            }
+    
+            // collision w bottom of player
+            if (topOfParticle > bottomOfPlayer && topOfParticle + dy < bottomOfPlayer + this.game.player.speed.y * deltaTime && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
+                this.markedForDeletion = true;
+                this.game.player.health--;
+                this.game.player.hit();
+            }
+    
+            // collision w left side of player
+            if (rightSideParticle < leftSideOfPlayer && rightSideParticle + dx > leftSideOfPlayer + this.game.player.speed.x * deltaTime && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
+                this.markedForDeletion = true;
+                this.game.player.health--;
+                this.game.player.hit();
+            }
+    
+            // collision w right side of player
+            if (leftSideOfParticle > rightSideOfPlayer && leftSideOfParticle + dx < rightSideOfPlayer + this.game.player.speed.x * deltaTime && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
+                this.markedForDeletion = true;
+                this.game.player.health--;
+                this.game.player.hit();
+            }
         }
 
         this.position.x += dx;
