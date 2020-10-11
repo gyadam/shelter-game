@@ -22,6 +22,7 @@ export default class Game{
         new InputHandler(this);
         this.frameCounter = 0;
         this.healthBar = new Bar(0.05 * this.gameWidth, 0.05 * this.gameHeight, 150, 20, "HEALTH", 100);
+        this.sanityBar = new Bar(0.05 * this.gameWidth + 200, 0.05 * this.gameHeight, 150, 20, "SANITY", 100);
     }
 
     createRandomParticles(){
@@ -72,7 +73,7 @@ export default class Game{
             this.player.update(deltaTime);
         }
 
-        if (this.player.health <= 0){
+        if (this.player.health <= 0 || this.player.sanity <= 0){
             this.gameState = GAMESTATE.GAMEOVER;
         }
 
@@ -83,10 +84,12 @@ export default class Game{
             ){
                 if (this.frameCounter % 10 == 0){
                     this.player.health = this.player.health >= 100 ? 100 : this.player.health + 1;
+                    this.player.sanity = this.player.sanity <= 0 ? 0 : this.player.sanity - 1;
                 }
         }
 
         this.healthBar.update(this.player.health);
+        this.sanityBar.update(this.player.sanity);
     }
 
     draw(ctx){
@@ -117,6 +120,7 @@ export default class Game{
         }
 
         this.healthBar.draw(ctx);
+        this.sanityBar.draw(ctx);
     }
 
 }

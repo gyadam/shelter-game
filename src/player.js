@@ -21,9 +21,9 @@ export default class Player{
             y: 1
         };
         this.health = 100;
+        this.sanity = 100;
         this.isHit = false;
         this.impactTime = 0;
-        this.heal = true;
     }
 
     moveLeft(){
