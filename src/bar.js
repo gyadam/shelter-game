@@ -37,6 +37,8 @@ export default class Bar{
         let fillWidth = this.value ? this.value * 1.5 - 2 : 0;
         ctx.fillRect(this.position.x + 1, this.position.y + 1, fillWidth, this.height - 2);
 
+        ctx.textBaseline = "alphabetic";
+
         ctx.font = "16px AllTheWayToTheSun";
         ctx.fillStyle = "black";
         ctx.textAlign = "center";

@@ -3,6 +3,7 @@ import House from './house.js';
 import InputHandler from './input.js';
 import Player from './player.js';
 import Bar from './bar.js';
+import ScoreCounter from './scorecounter.js';
 
 const GAMESTATE = {
     PAUSED: 0,
@@ -23,7 +24,8 @@ export default class Game{
         this.frameCounter = 0;
         this.healthBar = new Bar(0.05 * this.gameWidth, 0.05 * this.gameHeight, 150, 20, "HEALTH", 100);
         this.sanityBar = new Bar(0.05 * this.gameWidth + 200, 0.05 * this.gameHeight, 150, 20, "SANITY", 100);
-        
+        this.score = 0;
+        this.scoreCounter = new ScoreCounter(0.85 * this.gameWidth, 0.075 * this.gameHeight, 150, 20, "SCORE:", 0);
     }
 
     getRandomPositionOutside(){
@@ -139,10 +141,12 @@ export default class Game{
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.fillText("GAME OVER!", this.gameWidth / 2, this.gameHeight / 3);
+            ctx.fillText(`FINAL SCORE: ${this.score}`, this.gameWidth / 2, 2 * this.gameHeight / 3);
         }
 
         this.healthBar.draw(ctx);
         this.sanityBar.draw(ctx);
+        this.scoreCounter.draw(ctx);
     }
 
 }
