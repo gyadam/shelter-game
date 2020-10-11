@@ -81,6 +81,7 @@ export default class Game{
             && this.player.position.x + this.player.width < this.house.position.x + this.house.width
             && this.player.position.y > this.house.position.y
             && this.player.position.y + this.player.height < this.house.position.y + this.house.height
+            && this.gameState !== GAMESTATE.PAUSED
             ){
                 if (this.frameCounter % 10 == 0){
                     this.player.health = this.player.health >= 100 ? 100 : this.player.health + 1;
