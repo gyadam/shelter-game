@@ -16,26 +16,49 @@ export default class Game{
         this.gameHeight = gameHeight;
         this.gameState = GAMESTATE.RUNNING;
         this.numParticles = numParticles;
-        this.particles = this.createRandomParticles();
         this.house = new House();
+        this.particles = this.createRandomParticles();
         this.player = new Player(this, 487, 285);
         new InputHandler(this);
         this.frameCounter = 0;
         this.healthBar = new Bar(0.05 * this.gameWidth, 0.05 * this.gameHeight, 150, 20, "HEALTH", 100);
         this.sanityBar = new Bar(0.05 * this.gameWidth + 200, 0.05 * this.gameHeight, 150, 20, "SANITY", 100);
+        
+    }
+
+    getRandomPositionOutside(){
+        const pointInHouse = (x,y) => {
+            if (x > this.house.position.x - 20
+                && x < this.house.position.x + this.house.width + 20
+                && y > this.house.position.y - 20
+                && y < this.house.position.y + this.house.height + 20){
+                    return true;
+                }
+            return false;
+        }
+
+        let x = Math.floor(Math.random() * this.gameWidth);
+        let y = Math.floor(Math.random() * this.gameHeight);
+    
+        while(pointInHouse(x,y)){
+            console.log("generate new particle")
+            x = Math.floor(Math.random() * this.gameWidth);
+            y = Math.floor(Math.random() * this.gameHeight);
+        }
+
+        return {x, y};
+
     }
 
     createRandomParticles(){
         let particles = [];
-
+        
         for (let n = 0; n < this.numParticles; n++){
-            // TODO: fix issue with particles created inside of house on game start and after deletion!!!
-            const x = Math.floor(Math.random() * this.gameWidth);
-            const y = Math.floor(Math.random() * this.gameHeight);
-
+            const {x, y} = this.getRandomPositionOutside();
             let particle = new Particle(this, x, y);
             particles.push(particle);
         }
+
         return particles;
     }
 
@@ -57,9 +80,7 @@ export default class Game{
         // add new particles in place of destroyed ones
         let numParticlesToAdd = this.numParticles - this.particles.length;
         for (let i = 0; i < numParticlesToAdd; i++){
-            const x = Math.floor(Math.random() * this.gameWidth);
-            const y = Math.floor(Math.random() * this.gameHeight);
-
+            const {x, y} = this.getRandomPositionOutside();
             let particle = new Particle(this, x, y);
             this.particles.push(particle);
         }
