@@ -1,3 +1,13 @@
+@font-face{
+    font-family: 'AllTheWayToTheSun';
+    src: url('../assets/AllTheWayToTheSun-o2O0.ttf');
+}
+
+@font-face{
+    font-family: 'MachineGunk';
+    src: url('../assets/MachineGunk.ttf');
+}
+
 body{
     display: flex;
     min-height: 100vh;
@@ -9,4 +19,5 @@ body{
 #gameScreen{
     border: 1px solid black;
     display: block;
+    /* letter-spacing: 2px; */
 }

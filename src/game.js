@@ -104,7 +104,7 @@ export default class Game{
         if (this.gameState == GAMESTATE.PAUSED){
             ctx.fillStyle = 'rgba(0,0,0,0.4)';
             ctx.fillRect(0,0,this.gameWidth, this.gameHeight);
-            ctx.font = "bold 40px Arial";
+            ctx.font = "60px MachineGunk";
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.fillText("Paused", this.gameWidth / 2, this.gameHeight / 3);
@@ -113,7 +113,7 @@ export default class Game{
         if (this.gameState == GAMESTATE.GAMEOVER){
             ctx.fillStyle = 'rgba(0,0,0,0.4)';
             ctx.fillRect(0,0,this.gameWidth, this.gameHeight);
-            ctx.font = "bold 40px Arial";
+            ctx.font = "60px MachineGunk";
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.fillText("GAME OVER!", this.gameWidth / 2, this.gameHeight / 3);
