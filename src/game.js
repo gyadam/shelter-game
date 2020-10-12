@@ -4,6 +4,7 @@ import InputHandler from './input.js';
 import Player from './player.js';
 import Bar from './bar.js';
 import ScoreCounter from './scorecounter.js';
+import Star from './star.js';
 
 const GAMESTATE = {
     PAUSED: 0,
@@ -26,6 +27,8 @@ export default class Game{
         this.sanityBar = new Bar(0.05 * this.gameWidth + 200, 0.05 * this.gameHeight, 150, 20, "SANITY", 100);
         this.score = 0;
         this.scoreCounter = new ScoreCounter(0.85 * this.gameWidth, 0.075 * this.gameHeight, 150, 20, "SCORE:", 0);
+        this.numStars = 3;
+        this.stars = this.createStars();
     }
 
     getRandomPositionOutside(){
@@ -64,6 +67,18 @@ export default class Game{
         return particles;
     }
 
+    createStars(){
+        let stars = [];
+
+        for (let n = 0; n < this.numStars; n++){
+            const {x, y} = this.getRandomPositionOutside();
+            let star = new Star(x, y, 10);
+            stars.push(star);
+        }
+
+        return stars;
+    }
+
     togglePause(){
         if (this.gameState == GAMESTATE.RUNNING){
             this.gameState = GAMESTATE.PAUSED;
@@ -78,6 +93,7 @@ export default class Game{
 
         // destroy particles on collision
         this.particles = this.particles.filter(particle => !particle.markedForDeletion);
+        this.stars = this.stars.filter(star => !star.markedForDeletion);
 
         // add new particles in place of destroyed ones
         let numParticlesToAdd = this.numParticles - this.particles.length;
@@ -87,9 +103,20 @@ export default class Game{
             this.particles.push(particle);
         }
 
+        // add new stars in place of collected ones
+        let numStarsToAdd = this.numStars - this.stars.length;
+        for (let i = 0; i < numStarsToAdd; i++){
+            const {x, y} = this.getRandomPositionOutside();
+            let star = new Star(x, y, 10);
+            this.stars.push(star);
+        }
+
         if (this.gameState != GAMESTATE.PAUSED){
             for (let particle of this.particles){
                 particle.update(deltaTime);
+            }
+            for (let star of this.stars){
+                star.update(deltaTime);
             }
         }
         if (this.gameState == GAMESTATE.RUNNING){
@@ -110,16 +137,24 @@ export default class Game{
                     this.player.health = this.player.health >= 100 ? 100 : this.player.health + 1;
                     this.player.sanity = this.player.sanity <= 0 ? 0 : this.player.sanity - 1;
                 }
+        } else if (this.frameCounter % 10 == 0 && this.gameState !== GAMESTATE.PAUSED) {
+            this.player.sanity = this.player.sanity >= 100 ? 100 : this.player.sanity + 1;
         }
 
         this.healthBar.update(this.player.health);
         this.sanityBar.update(this.player.sanity);
+        this.scoreCounter.update(this.score);
     }
 
     draw(ctx){
         for (let particle of this.particles){
             particle.draw(ctx);
         }
+
+        for (let star of this.stars){
+            star.draw(ctx);
+        }
+
         this.house.draw(ctx);
         if (this.gameState != GAMESTATE.GAMEOVER){
             this.player.draw(ctx);

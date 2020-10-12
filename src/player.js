@@ -24,6 +24,7 @@ export default class Player{
         this.sanity = 100;
         this.isHit = false;
         this.impactTime = 0;
+        this.radius = (Math.sqrt(this.width*this.width + this.height*this.height)) / 2;
     }
 
     moveLeft(){
@@ -62,6 +63,23 @@ export default class Player{
         this.impactTime = 5;
     }
 
+    collect(star){
+        star.markedForDeletion = true;
+        this.game.score += 10;
+    }
+
+    checkCollision(object){
+        function distBetweenPoints(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        }
+
+        if (distBetweenPoints(this.position.x + this.width / 2, this.position.y + this.height / 2, object.position.x, object.position.y) < this.radius + object.radius){
+            return true;
+        }
+
+        return false;
+    }
+
     update(deltaTime){
         this.position.x += this.speed.x * deltaTime;
         this.position.y += this.speed.y * deltaTime;
@@ -91,6 +109,12 @@ export default class Player{
         } else {
             this.isHit = true;
             this.impactTime--;
+        }
+
+        for(let star of this.game.stars){
+            if(this.checkCollision(star)){
+                this.collect(star);
+            };
         }
     }
 

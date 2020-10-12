@@ -10,6 +10,10 @@ export default class ScoreCounter{
         this.value = value;
     }
 
+    update(score){
+        this.value = score;
+    }
+
     draw(ctx){
         ctx.font = "30px AllTheWayToTheSun";
         ctx.fillStyle = "black";
