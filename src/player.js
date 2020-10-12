@@ -8,7 +8,7 @@ export default class Player{
         this.width = 25;
         this.height = 34;
         this.color = 'black';
-        this.maxSpeed = 0.2;
+        this.maxSpeed = 0.25;
         this.speed = {
             x: 0,
             y: 0
@@ -87,24 +87,16 @@ export default class Player{
         this.position.x += this.speed.x * deltaTime;
         this.position.y += this.speed.y * deltaTime;
 
-        if (this.position.x < 0){
+        if (this.position.x > this.game.gameWidth + this.width){
             this.position.x = 0;
-            this.speed.x = 0;
-        }
-        
-        if (this.position.x + this.width > this.game.gameWidth){
-            this.position.x = this.game.gameWidth - this.width;
-            this.speed.x = 0;
+        } else if (this.position.x < 0 - this.width){
+            this.position.x = this.game.gameWidth;
         }
 
-        if (this.position.y < 0){
+        if (this.position.y > this.game.gameHeight + this.height){
             this.position.y = 0;
-            this.speed.y = 0;
-        }
-        
-        if (this.position.y + this.height > this.game.gameHeight){
-            this.position.y = this.game.gameHeight - this.height;
-            this.speed.y = 0;
+        } else if (this.position.y < 0 - this.height){
+            this.position.y = this.game.gameHeight;
         }
 
         if (this.impactTime === 0){
@@ -134,12 +126,10 @@ export default class Player{
         ctx.fillRect(this.position.x + this.width - this.legWidth, this.position.y + this.bodyHeight - 1, this.legWidth, 4)
 
         // eyes
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = `rgb(255, ${this.sanity * 2.55}, ${this.sanity * 2.55})`;
         ctx.fillRect(this.position.x + this.eyeOffset, this.position.y + this.eyeOffset, this.eyeSize, this.eyeSize);
         ctx.fillRect(this.position.x + this.width - this.eyeSize - this.eyeOffset, this.position.y + this.eyeOffset, this.eyeSize, this.eyeSize);
         
-        // todo: draw eyes in corner if moving diagonally
-
         if (this.speed.x < 0){
             this.pupilPosition.x = 0;
             this.pupilPosition.y = 2;
