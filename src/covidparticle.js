@@ -102,7 +102,7 @@ export default class Particle {
             // collision w top of player
             if (bottomOfParticle < topOfPlayer && bottomOfParticle + dy > topOfPlayer + this.game.player.speed.y * deltaTime && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
                 this.markedForDeletion = true;
-                this.game.player.health--;
+                this.game.player.health = this.game.player.health - 5 <= 0 ? 0 : this.game.player.health - 5;
                 this.game.player.hit();
 
             }
@@ -110,21 +110,21 @@ export default class Particle {
             // collision w bottom of player
             if (topOfParticle > bottomOfPlayer && topOfParticle + dy < bottomOfPlayer + this.game.player.speed.y * deltaTime && rightSideParticle + dx >= leftSideOfPlayer && leftSideOfParticle + dx <= rightSideOfPlayer){
                 this.markedForDeletion = true;
-                this.game.player.health--;
+                this.game.player.health = this.game.player.health - 5 <= 0 ? 0 : this.game.player.health - 5;
                 this.game.player.hit();
             }
     
             // collision w left side of player
             if (rightSideParticle < leftSideOfPlayer && rightSideParticle + dx > leftSideOfPlayer + this.game.player.speed.x * deltaTime && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
                 this.markedForDeletion = true;
-                this.game.player.health--;
+                this.game.player.health = this.game.player.health - 5 <= 0 ? 0 : this.game.player.health - 5;
                 this.game.player.hit();
             }
     
             // collision w right side of player
             if (leftSideOfParticle > rightSideOfPlayer && leftSideOfParticle + dx < rightSideOfPlayer + this.game.player.speed.x * deltaTime && bottomOfParticle + dy >= topOfPlayer && topOfParticle + dy <= bottomOfPlayer){
                 this.markedForDeletion = true;
-                this.game.player.health--;
+                this.game.player.health = this.game.player.health - 5 <= 0 ? 0 : this.game.player.health - 5;
                 this.game.player.hit();
             }
         }
