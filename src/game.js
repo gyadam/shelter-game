@@ -144,6 +144,20 @@ export default class Game{
         this.healthBar.update(this.player.health);
         this.sanityBar.update(this.player.sanity);
         this.scoreCounter.update(this.score);
+
+        if(this.score < 100){
+            this.numParticles = 5;
+        } else if (this.score < 200){
+            this.numParticles = 10;
+        } else if (this.score < 300){
+            this.numParticles = 15;
+        } else if (this.score < 400){
+            this.numParticles = 20;
+        } else if (this.score < 500){
+            this.numParticles = 25;
+        } else if (this.score < 600){
+            this.numParticles = 30;
+        }
     }
 
     draw(ctx){
