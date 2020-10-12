@@ -151,7 +151,7 @@ export default class Game{
             ){
                 if (this.frameCounter % 10 == 0){
                     this.player.health = this.player.health >= 100 ? 100 : this.player.health + 1;
-                    this.player.sanity = this.player.sanity - 10 <= 0 ? 0 : this.player.sanity - 10;
+                    this.player.sanity = this.player.sanity - 1 <= 0 ? 0 : this.player.sanity - 1;
                 }
         } else if (this.frameCounter % 10 == 0 && this.gameState === GAMESTATE.RUNNING) {
             this.player.sanity = this.player.sanity >= 100 ? 100 : this.player.sanity + 1;
@@ -178,7 +178,7 @@ export default class Game{
             ctx.textAlign = "center";
             ctx.fillText("SHELTER", this.gameWidth / 2, 0.25 * this.gameHeight);
             ctx.font = "20px MachineGunk";
-            
+
             ctx.fillText("A JavaScript game", this.gameWidth / 2, 0.3 * this.gameHeight);
 
             ctx.font = "20px MachineGunk";
