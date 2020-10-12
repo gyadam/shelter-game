@@ -6,13 +6,16 @@ export default class Player{
             y: y
         }
         this.width = 25;
-        this.height = 30;
+        this.height = 34;
         this.color = 'black';
         this.maxSpeed = 0.2;
         this.speed = {
             x: 0,
             y: 0
         };
+        this.bodyHeight = 30;
+        this.legWidth = 8;
+        this.legLength = 4;
         this.eyeSize = 7;
         this.eyeOffset = 4;
         this.pupilSize = 3;
@@ -120,14 +123,15 @@ export default class Player{
 
     draw(ctx){
 
+        ctx.beginPath();
+
         // body
         ctx.fillStyle = this.isHit ? 'red' : 'black';
-        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        ctx.fillRect(this.position.x, this.position.y, this.width, this.bodyHeight);
 
         // legs
-        const legWidth = 8;
-        ctx.fillRect(this.position.x, this.position.y + this.height - 1, legWidth, 4)
-        ctx.fillRect(this.position.x + this.width - legWidth, this.position.y + this.height - 1, legWidth, 4)
+        ctx.fillRect(this.position.x, this.position.y + this.bodyHeight - 1, this.legWidth, this.legLength)
+        ctx.fillRect(this.position.x + this.width - this.legWidth, this.position.y + this.bodyHeight - 1, this.legWidth, 4)
 
         // eyes
         ctx.fillStyle = 'white';

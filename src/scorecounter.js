@@ -15,6 +15,8 @@ export default class ScoreCounter{
     }
 
     draw(ctx){
+        ctx.beginPath();
+        
         ctx.font = "30px AllTheWayToTheSun";
         ctx.fillStyle = "black";
         ctx.textAlign = "center";

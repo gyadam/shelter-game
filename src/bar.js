@@ -16,6 +16,8 @@ export default class Bar{
 
     draw(ctx){
 
+        ctx.beginPath();
+
         ctx.fillStyle = "black";
         ctx.lineWidth= "2";
         ctx.rect(this.position.x, this.position.y, this.width, this.height);
