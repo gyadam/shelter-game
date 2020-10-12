@@ -16,6 +16,9 @@ export default class InputHandler{
                     break;
                 case "Escape":
                     game.togglePause();
+                    break;
+                case " ":
+                    game.start();
             }
         });
 
