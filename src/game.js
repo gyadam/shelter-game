@@ -21,7 +21,7 @@ export default class Game{
         this.numParticles = 0;
         this.house = new House();
         this.particles = this.createRandomParticles();
-        this.player = new Player(this, 487, 285);
+        this.player = new Player(this, 487, 310);
         new InputHandler(this);
         this.frameCounter = 0;
         this.healthBar = new Bar(0.05 * this.gameWidth, 0.05 * this.gameHeight, 150, 20, "HEALTH", 100);
@@ -39,7 +39,7 @@ export default class Game{
         } else if(GAMESTATE.GAMEOVER){
             this.numParticles = 0;
             this.particles = this.createRandomParticles();
-            this.player = new Player(this, 487, 285);
+            this.player = new Player(this, 487, 310);
             this.frameCounter = 0;
             this.score = 0;
             this.stars = this.createStars();
@@ -168,8 +168,8 @@ export default class Game{
     draw(ctx){
 
         if(this.gameState == GAMESTATE.MENU){
-            this.house.draw(ctx);
             this.player.draw(ctx);
+            this.house.draw(ctx);
             for (let particle of this.particles){
                 particle.draw(ctx);
             }
@@ -194,10 +194,10 @@ export default class Game{
                 star.draw(ctx);
             }
     
-            this.house.draw(ctx);
             if (this.gameState != GAMESTATE.GAMEOVER){
                 this.player.draw(ctx);
             }
+            this.house.draw(ctx);
             
             if (this.gameState == GAMESTATE.PAUSED){
                 ctx.fillStyle = 'rgba(0,0,0,0.4)';
