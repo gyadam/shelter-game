@@ -5,13 +5,13 @@ export default class Star{
             y: y
         }
         this.radius = radius;
-        this.scaleRatio = 0.4;
+        this.scaleRatio = 0.15;
         this.timer = 0;
         this.markedForDeletion = false;
     }
 
     update(deltaTime){
-        this.timer += deltaTime * 0.01;
+        this.timer += deltaTime * 0.005;
         this.radius += Math.sin(this.timer) * this.scaleRatio;
     }
 
@@ -21,6 +21,7 @@ export default class Star{
             ctx.save();
             ctx.scale(1, -1);
             ctx.beginPath();
+            ctx.strokeStyle = "black";
             ctx.translate(x, -y);
             ctx.moveTo(0,0-r);
             for (var i = 0; i < n; i++) {
@@ -30,6 +31,7 @@ export default class Star{
                 ctx.lineTo(0, 0 - r);
             }
             ctx.closePath();
+            ctx.stroke();
             ctx.fillStyle = "yellow";
             ctx.fill();
             ctx.restore();

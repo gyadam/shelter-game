@@ -88,7 +88,7 @@ export default class Game{
 
         for (let n = 0; n < this.numStars; n++){
             const {x, y} = this.getRandomPositionOutside();
-            let star = new Star(x, y, 10);
+            let star = new Star(x, y, 5);
             stars.push(star);
         }
 
@@ -123,7 +123,7 @@ export default class Game{
         let numStarsToAdd = this.numStars - this.stars.length;
         for (let i = 0; i < numStarsToAdd; i++){
             const {x, y} = this.getRandomPositionOutside();
-            let star = new Star(x, y, 10);
+            let star = new Star(x, y, 5);
             this.stars.push(star);
         }
 
