@@ -9,6 +9,8 @@ The game is deployed as a static site on Netlify, which automatically triggers a
 ## Play
 Shelter is live at **https://shelter-game.netlify.app/**
 
+![Screenshot GIF](/images/screenshot.gif)
+
 ## Features
 * Viruses drawn using trigonometric functions with HTML5 canvas and JavaScript
 * Increasing difficulty (number of viruses goes up with score)
