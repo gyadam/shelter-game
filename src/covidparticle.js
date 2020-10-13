@@ -1,11 +1,11 @@
 'use strict';
 
-const SPEED = 0.5;
+const SPEED = 0.3;
 const GAMEWIDTH = 1000;
 const GAMEHEIGHT = 600;
 
 export default class Particle {
-    constructor(game, x, y, color = "#FF0000"){
+    constructor(game, x, y, color = "#B22222"){
         this.game = game;
         this.position = {
             x: x,
@@ -43,6 +43,11 @@ export default class Particle {
         }
 
         ctx.stroke();
+
+        ctx.beginPath();
+        ctx.fillStyle = "#f5c9c9";
+        ctx.arc(this.position.x, this.position.y, this.radius-1, 0, 7);
+        ctx.fill();
 
         ctx.fillStyle = this.color;
 
