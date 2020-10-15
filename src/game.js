@@ -5,6 +5,7 @@ import Player from './player.js';
 import Bar from './bar.js';
 import ScoreCounter from './scorecounter.js';
 import Star from './star.js';
+import Coffee from './coffee.js';
 
 const GAMESTATE = {
     MENU: 0,
@@ -20,7 +21,8 @@ export default class Game{
         this.gameState = GAMESTATE.MENU;
         this.numParticles = 0;
         this.house = new House();
-        this.particles = this.createRandomParticles();
+        this.avgParticleSpeed = 0.3;
+        this.particles = this.createRandomParticles(this.avgParticleSpeed);
         this.player = new Player(this, 487, 310);
         new InputHandler(this);
         this.frameCounter = 0;
@@ -29,12 +31,19 @@ export default class Game{
         this.score = 0;
         this.scoreCounter = new ScoreCounter(0.85 * this.gameWidth, 0.075 * this.gameHeight, 150, 20, "SCORE:", 0);
         this.numStars = 3;
-        this.stars = this.createStars();
+        this.stars = [];
+        this.coffees = [];
+        this.maxCoffees = 2;
+        this.timeUntilNewCoffee = 500;
+        this.coffeeEffectIsOn = false;
+        this.coffeeEffectTime = 5000;
+        this.coffeeEffectCounter = 5000;
     }
 
     start(){
         if (this.gameState === GAMESTATE.MENU){
-            // this.stars = this.createStars();
+            this.coffees = [];
+            this.timeUntilNewCoffee = Math.random() * 8500 + 3500;
             this.gameState = GAMESTATE.RUNNING;
         } else if(GAMESTATE.GAMEOVER){
             this.numParticles = 0;
@@ -43,6 +52,7 @@ export default class Game{
             this.frameCounter = 0;
             this.score = 0;
             this.stars = this.createStars();
+            this.coffees = [];
             this.gameState = GAMESTATE.RUNNING;
         }
     }
@@ -71,12 +81,12 @@ export default class Game{
 
     }
 
-    createRandomParticles(){
+    createRandomParticles(speed){
         let particles = [];
         
         for (let n = 0; n < this.numParticles; n++){
             const {x, y} = this.getRandomPositionOutside();
-            let particle = new Particle(this, x, y);
+            let particle = new Particle(this, x, y, speed);
             particles.push(particle);
         }
 
@@ -103,6 +113,24 @@ export default class Game{
         }
     }
 
+    decreaseAvgParticleSpeed(ratio){
+        for (let particle of this.particles){
+            particle.speed.x *= ratio;
+            particle.speed.y *= ratio;
+            
+        }
+        this.avgParticleSpeed *= ratio;
+    }
+
+    increaseAvgParticleSpeed(ratio){
+        for (let particle of this.particles){
+            particle.speed.x /= ratio;
+            particle.speed.y  /= ratio;
+            
+        }
+        this.avgParticleSpeed /= ratio;
+    }
+
     update(deltaTime){
 
         this.frameCounter++;
@@ -110,12 +138,13 @@ export default class Game{
         // destroy particles on collision
         this.particles = this.particles.filter(particle => !particle.markedForDeletion);
         this.stars = this.stars.filter(star => !star.markedForDeletion);
+        this.coffees = this.coffees.filter(coffee => !coffee.markedForDeletion);
 
         // add new particles in place of destroyed ones
         let numParticlesToAdd = this.numParticles - this.particles.length;
         for (let i = 0; i < numParticlesToAdd; i++){
             const {x, y} = this.getRandomPositionOutside();
-            let particle = new Particle(this, x, y);
+            let particle = new Particle(this, x, y, this.avgParticleSpeed);
             this.particles.push(particle);
         }
 
@@ -134,9 +163,50 @@ export default class Game{
             for (let star of this.stars){
                 star.update(deltaTime);
             }
+            for (let coffee of this.coffees){
+                coffee.update(deltaTime);
+            }
         }
         if (this.gameState == GAMESTATE.RUNNING){
+
             this.player.update(deltaTime);
+
+            if (this.player.drankCoffee && !this.coffeeEffectIsOn){
+
+                this.coffeeEffectIsOn = true;
+                this.player.resetCoffeeFlag();
+                this.coffeeEffectCounter = this.coffeeEffectTime;
+                this.player.increaseSpeed(1.7);
+                this.decreaseAvgParticleSpeed(0.15);
+
+            } else if (this.player.drankCoffee && this.coffeeEffectIsOn) {
+
+                // new coffee should still have affect, but not on speed
+                this.coffeeEffectCounter = this.coffeeEffectTime;
+                this.player.resetCoffeeFlag();
+            }
+
+            if (this.coffeeEffectCounter < 0){
+                
+                this.coffeeEffectIsOn = false;
+                this.player.decreaseSpeed(1.7);
+                this.increaseAvgParticleSpeed(0.15);
+                this.coffeeEffectCounter = 0;
+
+            } else if (this.coffeeEffectIsOn === true) {
+                this.coffeeEffectCounter -= deltaTime;
+            }
+
+            // add new coffees at random time intervals, one at a time
+            if (this.timeUntilNewCoffee <= 0 && this.coffees.length < 2){
+                const {x, y} = this.getRandomPositionOutside();
+                let coffee = new Coffee(x, y);
+                this.coffees.push(coffee);
+                this.timeUntilNewCoffee = Math.random() * 8500 + 3500;
+            } else {
+                this.timeUntilNewCoffee -= deltaTime;
+            }
+
         }
 
         if (this.player.health <= 0 || this.player.sanity <= 0){
@@ -192,6 +262,10 @@ export default class Game{
     
             for (let star of this.stars){
                 star.draw(ctx);
+            }
+            
+            for (let coffee of this.coffees){
+                coffee.draw(ctx);
             }
     
             if (this.gameState != GAMESTATE.GAMEOVER){

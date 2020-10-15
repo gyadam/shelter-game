@@ -1,19 +1,18 @@
 'use strict';
 
-const SPEED = 0.3;
 const GAMEWIDTH = 1000;
 const GAMEHEIGHT = 600;
 
 export default class Particle {
-    constructor(game, x, y, color = "#B22222"){
+    constructor(game, x, y, speed, color = "#B22222"){
         this.game = game;
         this.position = {
             x: x,
             y: y
         }
         this.speed = {
-            x: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1),
-            y: Math.random() * SPEED * (Math.random() < 0.5 ? 1 : -1)
+            x: Math.random() * speed * (Math.random() < 0.5 ? 1 : -1),
+            y: Math.random() * speed * (Math.random() < 0.5 ? 1 : -1)
         }
         this.color  = color;
         this.size = 1;

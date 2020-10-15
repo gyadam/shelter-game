@@ -1,3 +1,6 @@
+import Coffee from "./coffee.js";
+import Star from "./star.js";
+
 export default class Player{
     constructor(game, x, y, color){
         this.game = game;
@@ -28,6 +31,7 @@ export default class Player{
         this.isHit = false;
         this.impactTime = 0;
         this.radius = (Math.sqrt(this.width*this.width + this.height*this.height)) / 2;
+        this.drankCoffee = false;
     }
 
     moveLeft(){
@@ -66,9 +70,26 @@ export default class Player{
         this.impactTime = 5;
     }
 
-    collect(star){
-        star.markedForDeletion = true;
-        this.game.score += 10;
+    increaseSpeed(ratio){
+        this.maxSpeed *= ratio;
+    }
+
+    decreaseSpeed(ratio){
+        this.maxSpeed /= ratio;
+    }
+
+    collect(object){
+        object.removeFromGame();
+        if (object instanceof Star){
+            this.game.score += 10;
+        } else if (object instanceof Coffee){
+            this.game.score += 20;
+            this.drankCoffee = true;
+        }
+    }
+
+    resetCoffeeFlag(){
+        this.drankCoffee = false;
     }
 
     checkCollision(object){
@@ -109,6 +130,12 @@ export default class Player{
         for(let star of this.game.stars){
             if(this.checkCollision(star)){
                 this.collect(star);
+            };
+        }
+
+        for (let coffee of this.game.coffees){
+            if (this.checkCollision(coffee)){
+                this.collect(coffee);
             };
         }
     }

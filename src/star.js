@@ -10,6 +10,10 @@ export default class Star{
         this.markedForDeletion = false;
     }
 
+    removeFromGame(){
+        this.markedForDeletion = true;
+    }
+
     update(deltaTime){
         this.timer += deltaTime * 0.005;
         this.radius += Math.sin(this.timer) * this.scaleRatio;
