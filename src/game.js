@@ -45,7 +45,7 @@ export default class Game{
             this.coffees = [];
             this.timeUntilNewCoffee = Math.random() * 8500 + 3500;
             this.gameState = GAMESTATE.RUNNING;
-        } else if(GAMESTATE.GAMEOVER){
+        } else if(this.gameState == GAMESTATE.GAMEOVER){
             this.numParticles = 0;
             this.particles = this.createRandomParticles();
             this.player = new Player(this, 487, 310);
