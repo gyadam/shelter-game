@@ -67,11 +67,17 @@ export default class Game{
                 }
             return false;
         }
+        const closeToBorders = (x, y) => {
+            if (y < 75 || y > 550 || x < 50 || x > 950){
+                return true;
+            }
+            return false;
+        }
 
         let x = Math.floor(Math.random() * this.gameWidth);
         let y = Math.floor(Math.random() * this.gameHeight);
     
-        while(pointInHouse(x,y)){
+        while(pointInHouse(x,y) || closeToBorders(x,y)){
             console.log("generate new particle")
             x = Math.floor(Math.random() * this.gameWidth);
             y = Math.floor(Math.random() * this.gameHeight);
