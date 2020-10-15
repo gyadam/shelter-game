@@ -273,6 +273,10 @@ export default class Game{
             }
             this.house.draw(ctx);
             
+            this.healthBar.draw(ctx);
+            this.sanityBar.draw(ctx);
+            this.scoreCounter.draw(ctx);
+            
             if (this.gameState == GAMESTATE.PAUSED){
                 ctx.fillStyle = 'rgba(0,0,0,0.4)';
                 ctx.fillRect(0,0,this.gameWidth, this.gameHeight);
@@ -294,9 +298,6 @@ export default class Game{
                 ctx.fillText("[SPACE] to restart",this.gameWidth / 2, 0.9 * this.gameHeight);
             }
     
-            this.healthBar.draw(ctx);
-            this.sanityBar.draw(ctx);
-            this.scoreCounter.draw(ctx);
         }
 
     }
